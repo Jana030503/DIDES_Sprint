@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>'39 – Queen</title>
+  <style>
+    @font-face {
+      font-family: 'Cinzel';
+      src: url('BigShouldersInline-VariableFont_opsz,wght.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: #121627;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .flex-container {
+      display: flex;
+      justify-content: center;
+      /* horizontal zentriert */
+      align-items: center;
+      /* vertikal zentriert */
+      height: 100vh;
+      position: relative;
+    }
+
+    /* Der Titel wird zentriert und der z-index angepasst */
+    .title {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      font-family: 'Cinzel';
+      font-weight: 900;
+      transform: translate(-65%, -49%) scale(1.3, 1.25);
+      font-size: min(100vw, 100vh);
+      color: rgba(255, 255, 255, 0.771);
+      pointer-events: none;
+      z-index: 1; /* Höherer z-index als der vertikale Text */
+      white-space: nowrap;
+      line-height: 1;
+      margin: 0;
+    }
+
+    /* Vertikale Platzierung von "QUEEN" */
+    .band {
+      position: absolute;
+      font-family: 'Cinzel';
+      font-weight: 900;
+      text-align: right;
+      color: rgba(255, 255, 255, 0.771);
+      font-size: min(24vw, 24vh); /* Responsive Schriftgröße */
+      
+      writing-mode: vertical-lr;
+      text-orientation: upright;
+      top: 50%;
+      right: 0px; /* Abstand vom rechten Rand */
+      transform: translate(30%, -50%) scale(2.5,1);
+      z-index: 1; /* Geringerer z-index als der Titel */
+      letter-spacing: -0.2em; 
+    }
+
+    .carousel-container {
+      position: relative;
+      width: 50vw;
+     
+    }
+
+    .image-wrapper {
+      position: relative;
+      /* <-- HIER hinzufügen */
+    }
+
+    .image-wrapper img {
+      
+      /* kleinere Größe */
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+      position: relative;
+      z-index: 1;
+      border: 10px solid #ffffff;
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2rem;
+      color: white;
+      background-color: rgba(0, 0, 0, 0.4);
+      border: none;
+      padding: 0.5rem 0.5rem 1rem;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .arrow.left {
+      left: 10px;
+    }
+
+    .arrow.right {
+      right: -10px;
+    }
+  </style>
+</head>
+
+<body>
+  <audio id="background-audio" src="39' Queen (Official Video).mp3" autoplay loop></audio>
+  <div class="flex-container">
+    <h1 class="title">'39</h1> <!-- Titel '39 -->
+    <h1 class="band">QUEEN</h1> <!-- Vertikaler Text -->
+    <div class="carousel-container">
+      <div class="image-wrapper" onclick="toggleImage()">
+        <button class="arrow left" onclick="event.stopPropagation(); prevSlide()">&#8592;</button>
+        <img id="zeitreise-img" src="Aarau_1930.png" alt="Ort im Jahr 1920" />
+        <button class="arrow right" onclick="event.stopPropagation(); nextSlide()">&#8594;</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('click', () => {
+      const audio = document.getElementById('background-audio');
+      if (audio.paused) {
+        audio.play();
+      }
+    });
+    const slides = [
+      { old: 'Aarau_1930.png', modern: 'Aarau_2025.png' },
+      { old: 'Basel_1920.png', modern: 'Basel_2021.png' },
+      { old: 'Bern_1931.png', modern: 'Bern_2025.png' },
+      { old: 'Flughafen_Zuerich_1930.png', modern: 'Flughafen_Zuerich_2025.png' },
+      { old: 'Genf_1932.png', modern: 'Genf_2025.png' },
+      { old: 'Luzern_1920.png', modern: 'Luzern_2021.png' },
+      { old: 'Sion_1920.png', modern: 'Sion_2021.png' },
+      { old: 'Thun_1926.png', modern: 'Thun_2025.png' },
+      { old: 'Zuerich_1931.png', modern: 'Zuerich_2025.png' }
+    ];
+
+    let currentSlide = 0;
+    let showingOld = true;
+
+    const img = document.getElementById('zeitreise-img');
+
+    function updateImage() {
+      img.src = showingOld ? slides[currentSlide].old : slides[currentSlide].modern;
+      img.alt = showingOld ? 'Ort im Jahr 1920' : 'Ort im Jahr 2020';
+    }
+
+    function toggleImage() {
+      showingOld = !showingOld;
+      updateImage();
+    }
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      showingOld = true;
+      updateImage();
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % slides.length;
+      showingOld = true;
+      updateImage();
+    }
+
+    updateImage();
+
+  </script>
+</body>
+
+</html>
