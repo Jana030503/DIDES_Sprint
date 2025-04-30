@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>'39 – Queen</title>
+  <style>
+    @font-face {
+      font-family: 'Cinzel';
+      src: url('BigShouldersInline-VariableFont_opsz,wght.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: #121627;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .flex-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      position: relative;
+}
+
+    /* Der Titel wird zentriert und der z-index angepasst */
+    .title {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      font-family: 'Cinzel';
+      font-weight: 900;
+      transform: translate(-63%, -49%) scale(1.40, 1.25);
+      font-size: max(50vw, 50vh);
+      color: rgba(255, 255, 255, 0.771);
+      pointer-events: none;
+      z-index: 1; /* Höherer z-index als der vertikale Text */
+      white-space: nowrap;
+      line-height: 1;
+      margin: 0;
+    }
+
+    /* Vertikale Platzierung von "QUEEN" */
+    .band {
+      position: absolute;
+      font-family: 'Cinzel';
+      font-weight: 900;
+      text-align: right;
+      color: rgba(255, 255, 255, 0.771);
+      font-size: min(24vw, 24vh); /* Responsive Schriftgröße */
+      
+      writing-mode: vertical-lr;
+      text-orientation: upright;
+      top: 50%;
+      right: 0px; /* Abstand vom rechten Rand */
+      transform: translate(30%, -50%) scale(2.5,1);
+      z-index: 1; /* Geringerer z-index als der Titel */
+      letter-spacing: -0.2em;
+      
+    }
+
+    .carousel-container {
+      position: relative;
+      width: 45vw;
+      max-width: 90vw;
+      margin: 0 auto;
+      z-index: 2;
+  }
+
+
+    .image-wrapper {
+      position: relative;
+      
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      /* <-- HIER hinzufügen */
+    }
+
+    .image-wrapper img {
+      
+      /* kleinere Größe */
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(124, 78, 218, 0.1);
+      position: relative;
+      z-index: 1;
+      border: 10px solid #ffffff;
+    }
+    /*
+    .caption {
+      margin-top: 5px;
+      font-weight: 900;
+      font-family: 'Cinzel';
+      font-size: 5vw;
+      color: rgba(237, 106, 45);
+      z-index: 2;
+    }*/
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2rem;
+      color: white;
+      background-color: rgba(0, 0, 0, 0.4);
+      border: none;
+      padding: 0.5rem 0.5rem 1rem;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .arrow.left {
+      left: 0px;
+    }
+
+    .arrow.right {
+      right: 0px;
+    }
+
+    @media (max-width: 768px) {
+
+    
+  .title {
+    transform: translate(-49%, -108%) scale(1, 1);
+    font-size: 80vw;
+  }
+
+  .band {
+    
+    font-size: 17vw;
+    transform: translate(-345%, -35%) scale(2.5, 1.5);
+    letter-spacing: -0.1em;
+  }
+
+  .carousel-container {
+    position: relative;
+    margin: 0 auto;
+    width: 80vw;
+  }
+  .image-wrapper img {
+    border: 7px solid #ffffff;
+  }
+/*
+  .caption {
+    font-size: 13vw;
+    text-align: end;
+  }
+*/
+  .arrow {
+    font-size: 1.5rem;
+    padding: 0.3rem 0.5rem 0.5rem;
+  }
+  .arrow.right {
+    right: 0px;
+  }
+
+  .arrow.left {
+    left: 0px;
+  }
+}
+  </style>
+</head>
+
+<body>
+  <audio id="background-audio" src="39' Queen (Official Video).mp3" autoplay loop></audio>
+  <div class="flex-container">
+    <h1 class="title">'39</h1> <!-- Titel '39 -->
+    <h1 class="band">QUEEN</h1> <!-- Vertikaler Text -->
+    <div class="carousel-container">
+      <div class="image-wrapper" onclick="toggleImage()">
+        <button class="arrow left" onclick="event.stopPropagation(); prevSlide()">&#8592;</button>
+        <img id="zeitreise-img" src="Aarau_1930.png" alt="Ort im Jahr 1920" />
+        <button class="arrow right" onclick="event.stopPropagation(); nextSlide()">&#8594;</button>
+      </div>
+      <!--<div class="caption" id="caption-text">Aarau</div>-->
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('click', () => {
+      const audio = document.getElementById('background-audio');
+      if (audio.paused) {
+        audio.play();
+      }
+    });
+    const slides = [
+      { location: "Aarau", old: 'Aarau_1930.png', modern: 'Aarau_2025.png' },
+      { location: "Bern", old: 'Bern_1931.png', modern: 'Bern_2025.png' },
+      { location: "Flughafen Zürich", old: 'Flughafen_Zuerich_1930.png', modern: 'Flughafen_Zuerich_2025.png' },
+      { location: "Genf", old: 'Genf_1932.png', modern: 'Genf_2025.png' },  
+      { location: "Thun", old: 'Thun_1926.png', modern: 'Thun_2025.png' },
+      { location: "Zürich", old: 'Zuerich_1931.png', modern: 'Zuerich_2025.png' }
+    ];
+
+    let currentSlide = 0;
+    let showingOld = true;
+
+    const img = document.getElementById('zeitreise-img');
+    const captionElement = document.getElementById('caption-text');
+
+
+    function updateImage() {
+      img.src = showingOld ? slides[currentSlide].old : slides[currentSlide].modern;
+      img.alt = showingOld ? 'Ort im Jahr 1920' : 'Ort im Jahr 2020';
+      captionElement.textContent = slides[currentSlide].location;
+    }
+
+    function toggleImage() {
+      showingOld = !showingOld;
+      updateImage();
+    }
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      showingOld = true;
+      updateImage();
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % slides.length;
+      showingOld = true;
+      updateImage();
+    }
+
+    updateImage();
+
+  </script>
+</body>
+
+</html>
