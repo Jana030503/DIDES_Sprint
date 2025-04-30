@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>'39 – Queen</title>
+  <style>
+    @font-face {
+      font-family: 'Cinzel';
+      src: url('BigShouldersInline-VariableFont_opsz,wght.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: black;
+      font-family: Arial, sans-serif;
+    }
+
+    .background-carousel {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .image-wrapper {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .image-wrapper img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2rem;
+      color: white;
+      background-color: rgba(0, 0, 0, 0.4);
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      z-index: 3;
+    }
+
+    .arrow.left {
+      left: 1rem;
+    }
+
+    .arrow.right {
+      right: 1rem;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      pointer-events: none;
+    }
+
+    .title {
+      font-family: 'Cinzel', serif;
+      font-size: 20vw;
+      font-weight: 900;
+      color: white;
+      opacity: 0.5;
+      margin: 0;
+      z-index: 2;
+      line-height: 1;
+    }
+
+    .band {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%) scale(2.5, 1.25);
+      font-family: 'Cinzel', serif;
+      font-size: 10vw;
+      font-weight: 900;
+      color: white;
+      opacity: 0.5;
+      writing-mode: vertical-lr;
+      text-orientation: upright;
+      letter-spacing: -0.15em;
+    }
+
+    @media (max-width: 768px) {
+      .title {
+        font-size: 30vw;
+      }
+
+      .band {
+        font-size: 15vw;
+        transform: translateY(-50%) scale(1.5, 1.25);
+      }
+
+      .arrow {
+        font-size: 1.5rem;
+        padding: 0.3rem 0.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <audio id="background-audio" src="39' Queen (Official Video).mp3" autoplay loop></audio>
+
+  <div class="background-carousel">
+    <div class="image-wrapper" onclick="toggleImage()">
+      <button class="arrow left" onclick="event.stopPropagation(); prevSlide()">&#8592;</button>
+      <img id="zeitreise-img" src="Aarau_1930.png" alt="Ort im Jahr 1920" />
+      <button class="arrow right" onclick="event.stopPropagation(); nextSlide()">&#8594;</button>
+    </div>
+  </div>
+
+  <div class="overlay">
+    <h1 class="title">'39</h1>
+    <h1 class="band">QUEEN</h1>
+  </div>
+
+  <script>
+    document.addEventListener('click', () => {
+      const audio = document.getElementById('background-audio');
+      if (audio.paused) {
+        audio.play();
+      }
+    });
+
+    const slides = [
+      { location: "Aarau", old: 'Aarau_1930.png', modern: 'Aarau_2025.png' },
+     
+      { location: "Bern", old: 'Bern_1931.png', modern: 'Bern_2025.png' },
+      { location: "Flughafen Zürich", old: 'Flughafen_Zuerich_1930.png', modern: 'Flughafen_Zuerich_2025.png' },
+      { location: "Genf", old: 'Genf_1932.png', modern: 'Genf_2025.png' },
+    
+     
+      { location: "Thun", old: 'Thun_1926.png', modern: 'Thun_2025.png' },
+      { location: "Zürich", old: 'Zuerich_1931.png', modern: 'Zuerich_2025.png' }
+    ];
+
+    let currentSlide = 0;
+    let showingOld = true;
+
+    const img = document.getElementById('zeitreise-img');
+
+    function updateImage() {
+      img.src = showingOld ? slides[currentSlide].old : slides[currentSlide].modern;
+      img.alt = showingOld ? 'Ort im Jahr 1920' : 'Ort im Jahr 2020';
+    }
+
+    function toggleImage() {
+      showingOld = !showingOld;
+      updateImage();
+    }
+
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      showingOld = true;
+      updateImage();
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % slides.length;
+      showingOld = true;
+      updateImage();
+    }
+
+    updateImage();
+  </script>
+</body>
+</html>
