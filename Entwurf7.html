@@ -48,6 +48,11 @@
       display: block;
     }
 
+    .no-transition {
+      transition: none !important;
+    }
+
+    /* Rest Ihres CSS bleibt gleich */
     .arrow {
       position: absolute;
       top: 50%;
@@ -132,10 +137,8 @@
   <audio id="background-audio" src="39' Queen (Official Video).mp3" autoplay loop></audio>
 
   <div class="background-carousel">
-    <div class="image-wrapper" onclick="toggleImage()">
-      
+    <div class="image-wrapper" id="image-container">
       <img id="zeitreise-img" src="Aarau_1930.png" alt="Ort im Jahr 1920" />
-      
     </div>
   </div>
 
@@ -163,8 +166,10 @@
   
     let currentSlide = 0;
     let showingOld = true;
+    let isAutoTransition = false;
   
     const img = document.getElementById('zeitreise-img');
+    const imageContainer = document.getElementById('image-container');
   
     function updateImage() {
       const newSrc = showingOld ? slides[currentSlide].old : slides[currentSlide].modern;
@@ -172,12 +177,26 @@
       // Nur wechseln, wenn sich das Bild wirklich ändert
       if (img.src.includes(newSrc)) return;
   
-      img.style.opacity = 0;
-  
-      setTimeout(() => {
+      if (isAutoTransition) {
+        // Für automatische Wechsel: Überblendung verwenden
+        img.classList.remove('no-transition');
+        img.style.opacity = 0;
+        
+        setTimeout(() => {
+          img.src = newSrc;
+          img.alt = showingOld ? 'Ort im Jahr 1920' : 'Ort im Jahr 2020';
+        }, 300);
+      } else {
+        // Für manuelle Wechsel: Direkter Wechsel
+        img.classList.add('no-transition');
         img.src = newSrc;
         img.alt = showingOld ? 'Ort im Jahr 1920' : 'Ort im Jahr 2020';
-      }, 300);
+        
+        // Transition nach kurzer Zeit wieder aktivieren
+        setTimeout(() => {
+          img.classList.remove('no-transition');
+        }, 50);
+      }
     }
   
     // Wenn das Bild geladen ist, dann wieder sichtbar machen
@@ -187,12 +206,13 @@
   
     function toggleImage() {
       showingOld = !showingOld;
+      isAutoTransition = false;
       updateImage();
     }
   
     function nextSlideAuto() {
       currentSlide = (currentSlide + 1) % slides.length;
-      // showingOld bleibt erhalten, damit der Nutzerzustand respektiert wird
+      isAutoTransition = true;
       updateImage();
     }
   
@@ -200,12 +220,10 @@
     updateImage();
   
     // Wechsel alle 5 Sekunden
-    setInterval(nextSlideAuto, 5000);
+    setInterval(nextSlideAuto, 8000);
   
     // Bild per Klick zwischen alt/neu wechseln
-    document.querySelector('.image-wrapper').addEventListener('click', toggleImage);
+    imageContainer.addEventListener('click', toggleImage);
   </script>
-  
-  
 </body>
 </html>
