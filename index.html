@@ -52,7 +52,6 @@
       transition: none !important;
     }
 
-    /* Rest Ihres CSS bleibt gleich */
     .arrow {
       position: absolute;
       top: 50%;
@@ -88,10 +87,30 @@
       pointer-events: none;
     }
 
+    .title-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .year {
+      font-family: 'Cinzel', serif;
+      font-size: 10vw;
+      font-weight: 800;
+      color: white;
+      opacity: 0.6;
+      margin-bottom: -9vw;
+      transform: translate(330%,5%) scale(1, 1);
+      align-self: flex-start;
+      width: 1em; /* Feste Breite */
+      text-align: center; 
+    }
+
     .title {
       font-family: 'Cinzel', serif;
       font-size: 50vw;
-      transform: translate(35%,10%) scale(1, 1);
+      transform: translate(35%, 8%) scale(1, 1);
       font-weight: 800;
       color: white;
       opacity: 0.6;
@@ -114,25 +133,15 @@
       text-orientation: upright;
       letter-spacing: -0.15em;
     }
-    .year {
-      position: absolute;
-      font-family: 'Cinzel', serif;
-      font-size: 8vw;
-    
-      font-weight: 800;
-      color: white;
-      opacity: 0.6;
-    }
-    .y1{
-        display: flex;
-    }
-    .y2{
-        display: none;
-    }
 
     @media (max-width: 768px) {
       .title {
         font-size: 30vw;
+      }
+
+      .year {
+        font-size: 10vw;
+        margin-bottom: -3vw;
       }
 
       .band {
@@ -158,9 +167,10 @@
   </div>
 
   <div class="overlay">
-    <h1 class="title">'39</h1>
-    <div class="year y1">19</div>
-    <div class="year y2">20</div>
+    <div class="title-container">
+      <div id="year-display" class="year">19</div>
+      <h1 class="title">'39</h1>
+    </div>
     <h1 class="band">QUEEN</h1>
   </div>
 
@@ -187,9 +197,11 @@
   
     const img = document.getElementById('zeitreise-img');
     const imageContainer = document.getElementById('image-container');
+    const yearDisplay = document.getElementById('year-display');
   
     function updateImage() {
       const newSrc = showingOld ? slides[currentSlide].old : slides[currentSlide].modern;
+      const newYearPrefix = showingOld ? '19' : '20';
   
       // Nur wechseln, wenn sich das Bild wirklich ändert
       if (img.src.includes(newSrc)) return;
@@ -202,12 +214,14 @@
         setTimeout(() => {
           img.src = newSrc;
           img.alt = showingOld ? 'Ort im Jahr 1920' : 'Ort im Jahr 2020';
+          yearDisplay.textContent = newYearPrefix;
         }, 300);
       } else {
         // Für manuelle Wechsel: Direkter Wechsel
         img.classList.add('no-transition');
         img.src = newSrc;
         img.alt = showingOld ? 'Ort im Jahr 1920' : 'Ort im Jahr 2020';
+        yearDisplay.textContent = newYearPrefix;
         
         // Transition nach kurzer Zeit wieder aktivieren
         setTimeout(() => {
@@ -236,7 +250,7 @@
     // Erstes Bild anzeigen
     updateImage();
   
-    // Wechsel alle 5 Sekunden
+    // Wechsel alle 8 Sekunden
     setInterval(nextSlideAuto, 8000);
   
     // Bild per Klick zwischen alt/neu wechseln
